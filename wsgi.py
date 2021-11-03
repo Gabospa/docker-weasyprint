@@ -76,7 +76,10 @@ def generate():
         css = [CSS(string=sheet) for sheet in data['css']]
         pdf = html.write_pdf(stylesheets=css)
     else:
-        html = HTML(string=request.data.decode('utf-8'))
+        html = HTML(
+            string=request.data,
+            encoding="utf-8"
+            )
         pdf = html.write_pdf()
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
