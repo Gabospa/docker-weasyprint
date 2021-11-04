@@ -70,16 +70,12 @@ def home():
 def generate():
     name = request.args.get('filename', 'unnamed.pdf')
     app.logger.info('POST  /pdf?filename=%s' % name)
-    if request.headers['Content-Type'] == 'application/json':
+    if request.headers['Content-Type'] == 'application/json':   
         data = json.loads(request.data.decode('utf-8'))
-        html = HTML(string=data['html'])
-        css = [CSS(string=sheet) for sheet in data['css']]
-        pdf = html.write_pdf(stylesheets=css)
+        html = HTML(string=data)
+        pdf = html.write_pdf()
     else:
-        html = HTML(
-            string=request.data,
-            encoding="utf-8"
-            )
+        html = HTML(string=request.data,encoding="utf-8")
         pdf = html.write_pdf()
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
